@@ -22,7 +22,3 @@ class RegisterPhoneCountAPIView(APIView):
             'phone': mobile,
         }
         return Response(context)
-
-class RegisterCreateView(CreateAPIView):
-    def post(self, request):
-        pass
