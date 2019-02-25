@@ -1,16 +1,14 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from .models import User
 from rest_framework.response import Response
-from rest_framework.generics import CreateAPIView
-# Create your views here.
+from rest_framework.generics import GenericAPIView
+from .serializers import RegisterCreateSerializer
 class RegisterUsernameCountAPIView(APIView):
-    def get(self, request, username):  # 这个是拼接在路径后面的参数
-        # 通过查询用户名的个数来确定用户是否存在
+    def get(self, request, username):
         count = User.objects.filter(username=username).count()
         context = {
-            'count': count,
-            'username':username,
+            'count':count,
+            'username': username,
         }
         return Response(context)
 
@@ -18,7 +16,21 @@ class RegisterPhoneCountAPIView(APIView):
     def get(self, request, mobile):
         count = User.objects.filter(mobile=mobile).count()
         context = {
+            'mobile': mobile,
             'count': count,
-            'phone': mobile,
         }
         return Response(context)
+
+class RegisterCreateView(GenericAPIView):
+    """
+    实现注册功能:
+        1.获取参数
+        2.校验参数
+        3.保存
+    """
+    serializer_class = RegisterCreateSerializer
+    def post(self, request):
+        serializer = self.get_serializer(request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
