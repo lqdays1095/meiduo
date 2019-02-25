@@ -4,7 +4,7 @@ import re
 from django_redis import get_redis_connection
 class RegisterCreateSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(label='验证密码', write_only=True)
-    allow = serializers.CharField(laber='是否同意协议', write_only=True)
+    allow = serializers.CharField(label='是否同意协议', write_only=True)
     sms_code = serializers.CharField(label='短信验证码', min_length=6, max_length=6, write_only=True)
     class Meta:
         model = User
